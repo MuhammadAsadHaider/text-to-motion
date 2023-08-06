@@ -16,11 +16,11 @@ from utils.word_vectorizer import WordVectorizer, POS_enumerator
 
 def plot_t2m(data, save_dir):
     data = train_dataset.inv_transform(data)
-    for i in range(len(data)):
-        joint_data = data[i]
-        joint = recover_from_ric(torch.from_numpy(joint_data).float(), opt.joints_num).numpy()
-        save_path = pjoin(save_dir, '%02d.mp4'%(i))
-        plot_3d_motion(save_path, kinematic_chain, joint, title="None", fps=fps, radius=radius)
+    # for i in range(len(data)):
+    #     joint_data = data[i]
+    #     joint = recover_from_ric(torch.from_numpy(joint_data).float(), opt.joints_num).numpy()
+    #     save_path = pjoin(save_dir, '%02d.mp4'%(i))
+    #     plot_3d_motion(save_path, kinematic_chain, joint, title="None", fps=fps, radius=radius)
 
 
 if __name__ == '__main__':
@@ -64,6 +64,16 @@ if __name__ == '__main__':
         dim_pose = 251
         opt.max_motion_length = 196
         kinematic_chain = paramUtil.kit_kinematic_chain
+    elif opt.dataset_name == 'h2s':
+        opt.data_root = './dataset/H2S'
+        opt.motion_dir = pjoin(opt.data_root, 'features')
+        opt.text_dir = pjoin(opt.data_root, 'texts')
+        opt.joints_num = 75
+        radius = None
+        fps = 24
+        dim_pose = 225
+        opt.max_motion_length = 150
+        kinematic_chain = None
     else:
         raise KeyError('Dataset Does Not Exist')
 

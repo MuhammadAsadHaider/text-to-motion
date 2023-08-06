@@ -69,14 +69,22 @@ if __name__ == '__main__':
         opt.max_motion_length = 196
         num_classes = 200 // opt.unit_length
         meta_root = pjoin(opt.checkpoints_dir, opt.dataset_name, 'Comp_v6_KLD005', 'meta')
+    elif opt.dataset_name == 'h2s':
+        opt.data_root = './dataset/H2S'
+        opt.motion_dir = pjoin(opt.data_root, 'features')
+        opt.text_dir = pjoin(opt.data_root, 'texts')
+        opt.joints_num = 75
+        fps = 24
+        dim_pose = 225
+        opt.max_motion_length = 150
     else:
         raise KeyError('Dataset Does Not Exist')
 
     dim_word = 300
     dim_pos_ohot = len(POS_enumerator)
 
-    mean = np.load(pjoin(meta_root, 'mean.npy'))
-    std = np.load(pjoin(meta_root, 'std.npy'))
+    mean = np.load(pjoin(opt.data_root, 'Mean.npy'))
+    std = np.load(pjoin(opt.data_root, 'Std.npy'))
 
     w_vectorizer = WordVectorizer('./glove', 'our_vab')
     train_split_file = pjoin(opt.data_root, 'train.txt')
