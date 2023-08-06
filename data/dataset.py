@@ -312,24 +312,27 @@ class Text2MotionDatasetV2(data.Dataset):
         pos_one_hots = []
         word_embeddings = []
         for token in tokens:
-            word_emb, pos_oh = self.w_vectorizer[token]
+            try:
+                word_emb, pos_oh = self.w_vectorizer[token]
+            except:
+                word_emb, pos_oh = self.w_vectorizer['unk/OTHER']
             pos_one_hots.append(pos_oh[None, :])
             word_embeddings.append(word_emb[None, :])
         pos_one_hots = np.concatenate(pos_one_hots, axis=0)
         word_embeddings = np.concatenate(word_embeddings, axis=0)
 
         # Crop the motions in to times of 4, and introduce small variations
-        if self.opt.unit_length < 10:
-            coin2 = np.random.choice(['single', 'single', 'double'])
-        else:
-            coin2 = 'single'
+        # if self.opt.unit_length < 10:
+        #     coin2 = np.random.choice(['single', 'single', 'double'])
+        # else:
+        #     coin2 = 'single'
 
-        if coin2 == 'double':
-            m_length = (m_length // self.opt.unit_length - 1) * self.opt.unit_length
-        elif coin2 == 'single':
-            m_length = (m_length // self.opt.unit_length) * self.opt.unit_length
-        idx = random.randint(0, len(motion) - m_length)
-        motion = motion[idx:idx+m_length]
+        # if coin2 == 'double':
+        #     m_length = (m_length // self.opt.unit_length - 1) * self.opt.unit_length
+        # elif coin2 == 'single':
+        #     m_length = (m_length // self.opt.unit_length) * self.opt.unit_length
+        # idx = random.randint(0, len(motion) - m_length)
+        # motion = motion[idx:idx+m_length]
 
         "Z Normalization"
         motion = (motion - self.mean) / self.std
